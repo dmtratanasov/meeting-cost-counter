@@ -55,7 +55,7 @@ const Counter: React.FC<CounterProps> = ({ averageSalary, attendees, onStop }) =
     <div className={styles.counterContainer}>
       <h1 className={styles.counterTitle}>Meeting Cost Counter</h1>
       <p className={styles.counterText}>Time Elapsed: {formatTime(seconds)}</p>
-      <p className={styles.counterText}>Meeting Cost: ${cost.toFixed(2)}</p>
+      <p className={styles.counterText}>Meeting Cost: €{cost.toFixed(2)}</p>
       <div>
         <button className={`${styles.button} ${styles.buttonPause}`} onClick={() => setIsPaused(!isPaused)}>
           {isPaused ? 'Resume' : 'Pause'}
