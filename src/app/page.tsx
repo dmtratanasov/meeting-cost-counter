@@ -1,95 +1,142 @@
-import Image from "next/image";
+"use client";
+import { useState } from "react";
+import Counter from "../components/Counter";
+import Toaster from "../components/Toaster";
+import { toast } from "react-toastify";
 import styles from "./page.module.css";
 
-export default function Home() {
-  return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  );
+interface Attendee {
+  name: string;
+  role: string;
+  department: string;
 }
+
+const Home: React.FC = () => {
+  const [averageSalary, setAverageSalary] = useState<number>(0);
+  const [attendees, setAttendees] = useState<Attendee[]>([
+    { name: "", role: "", department: "" }
+  ]);
+  const [showCounter, setShowCounter] = useState<boolean>(false);
+  const [removingAttendeeIndex, setRemovingAttendeeIndex] = useState<number | null>(null);
+
+  const addAttendee = () => {
+    setAttendees([...attendees, { name: "", role: "", department: "" }]);
+  };
+
+  const updateAttendee = (index: number, updatedAttendee: Attendee) => {
+    const updatedAttendees = attendees.map((attendee, i) =>
+      i === index ? updatedAttendee : attendee
+    );
+    setAttendees(updatedAttendees);
+  };
+
+  const removeAttendee = (index: number) => {
+    setRemovingAttendeeIndex(index);
+    setTimeout(() => {
+      const updatedAttendees = attendees.filter((_, i) => i !== index);
+      setAttendees(updatedAttendees);
+      setRemovingAttendeeIndex(null);
+    }, 500); // match animation duration
+  };
+
+  const handleStart = () => {
+    if (averageSalary > 0 && attendees.length > 0) {
+      setShowCounter(true);
+      toast.success("Meeting started!");
+    } else {
+      toast.error("Please enter average salary and add at least one attendee.");
+    }
+  };
+
+  const handleStop = () => {
+    setShowCounter(false);
+    setAttendees([{ name: "", role: "", department: "" }]);
+    setAverageSalary(0);
+    toast.info("Meeting stopped");
+  };
+
+  return (
+    <div className={styles.container}>
+      <Toaster />
+      {!showCounter && (
+        <div className={`${styles.formContainer} ${styles.fadeIn}`}>
+          <h1 className={styles.title}>Meeting Cost Counter</h1>
+          <div>
+            <label className={styles.label}>
+              Average Salary (annual):
+              <input
+                className={styles.input}
+                type="number"
+                value={averageSalary}
+                onChange={(e) => setAverageSalary(parseFloat(e.target.value))}
+              />
+            </label>
+          </div>
+          <div>
+            <button className={`${styles.button} ${styles.buttonAdd}`} onClick={addAttendee}>
+              Add Attendee
+            </button>
+          </div>
+          <div className={styles.attendeesContainer}>
+            {attendees.map((attendee, index) => (
+              <div
+                key={index}
+                className={`${styles.attendeeContainer} ${
+                  removingAttendeeIndex === index ? styles.slideOut : styles.slideIn
+                }`}
+              >
+                <div className={styles.inputsContainer}>
+                  <input
+                    className={styles.input}
+                    type="text"
+                    placeholder="Attendee Name"
+                    value={attendee.name}
+                    onChange={(e) =>
+                      updateAttendee(index, { ...attendee, name: e.target.value })
+                    }
+                  />
+                  <input
+                    className={styles.input}
+                    type="text"
+                    placeholder="Role"
+                    value={attendee.role}
+                    onChange={(e) =>
+                      updateAttendee(index, { ...attendee, role: e.target.value })
+                    }
+                  />
+                  <input
+                    className={styles.input}
+                    type="text"
+                    placeholder="Department"
+                    value={attendee.department}
+                    onChange={(e) =>
+                      updateAttendee(index, { ...attendee, department: e.target.value })
+                    }
+                  />
+                  <button
+                    className={`${styles.button} ${styles.buttonRemove}`}
+                    onClick={() => removeAttendee(index)}
+                  >
+                    Remove
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+          <button className={`${styles.button} ${styles.buttonStart}`} onClick={handleStart}>
+            Start Meeting
+          </button>
+        </div>
+      )}
+      {showCounter && (
+        <Counter
+          averageSalary={averageSalary}
+          attendees={attendees}
+          onStop={handleStop}
+        />
+      )}
+    </div>
+  );
+};
+
+export default Home;

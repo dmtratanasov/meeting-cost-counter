@@ -1,0 +1,24 @@
+.reportContainer {
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  .reportTitle {
+    font-size: 2em;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .chartContainer {
+    margin-bottom: 20px;
+  }
+  
+  .chartContainer h3 {
+    margin-bottom: 10px;
+    font-size: 1.5em;
+    color: #555;
+  }
+  

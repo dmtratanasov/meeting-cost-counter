@@ -1,0 +1,58 @@
+.counterContainer {
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    margin: 0 auto;
+    text-align: center;
+    animation: fadeIn 0.5s ease-in-out;
+  }
+  
+  .counterTitle {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    color: #0070f3;
+  }
+  
+  .counterText {
+    font-size: 1.5em;
+    margin: 10px 0;
+    color: #555;
+  }
+  
+  .button {
+    margin: 5px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-size: 1em;
+  }
+  
+  .buttonPause {
+    background-color: #ffc107;
+    color: black;
+  }
+  
+  .buttonPause:hover {
+    background-color: #e0a800;
+  }
+  
+  .buttonStop {
+    background-color: #dc3545;
+    color: white;
+  }
+  
+  .buttonStop:hover {
+    background-color: #c82333;
+  }
+  
+  .buttonReport {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .buttonReport:hover {
+    background-color: #0056b3;
+  }
