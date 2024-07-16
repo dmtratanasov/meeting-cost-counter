@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
+import { toast } from "react-toastify";
 import Counter from "../components/Counter";
 import Toaster from "../components/Toaster";
-import { toast } from "react-toastify";
 import styles from "./page.module.css";
 
 interface Attendee {
@@ -11,6 +11,9 @@ interface Attendee {
   department: string;
 }
 
+const roles = ['Frontend Dev', 'Backend Dev', 'QA', 'HR', 'Project Manager', 'Designer'];
+const departments = ['Development', 'Product Development', 'QA', 'Management'];
+
 const Home: React.FC = () => {
   const [averageSalary, setAverageSalary] = useState<number>(0);
   const [attendees, setAttendees] = useState<Attendee[]>([
@@ -18,6 +21,7 @@ const Home: React.FC = () => {
   ]);
   const [showCounter, setShowCounter] = useState<boolean>(false);
   const [removingAttendeeIndex, setRemovingAttendeeIndex] = useState<number | null>(null);
+
 
   const addAttendee = () => {
     setAttendees([...attendees, { name: "", role: "", department: "" }]);
@@ -95,24 +99,30 @@ const Home: React.FC = () => {
                       updateAttendee(index, { ...attendee, name: e.target.value })
                     }
                   />
-                  <input
+                  <select
                     className={styles.input}
-                    type="text"
-                    placeholder="Role"
                     value={attendee.role}
                     onChange={(e) =>
                       updateAttendee(index, { ...attendee, role: e.target.value })
                     }
-                  />
-                  <input
+                  >
+                    <option value="">Select Role</option>
+                    {roles.map(role => (
+                      <option key={role} value={role}>{role}</option>
+                    ))}
+                  </select>
+                  <select
                     className={styles.input}
-                    type="text"
-                    placeholder="Department"
                     value={attendee.department}
                     onChange={(e) =>
                       updateAttendee(index, { ...attendee, department: e.target.value })
                     }
-                  />
+                  >
+                    <option value="">Select Department</option>
+                    {departments.map(department => (
+                      <option key={department} value={department}>{department}</option>
+                    ))}
+                  </select>
                   <button
                     className={`${styles.button} ${styles.buttonRemove}`}
                     onClick={() => removeAttendee(index)}

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './Counter.module.css';
 import ReportModal from './ReportModal';
 
@@ -19,6 +19,8 @@ const Counter: React.FC<CounterProps> = ({ averageSalary, attendees, onStop }) =
   const [cost, setCost] = useState<number>(0);
   const [isPaused, setIsPaused] = useState<boolean>(false);
   const [isReportModalOpen, setIsReportModalOpen] = useState<boolean>(false);
+
+
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
