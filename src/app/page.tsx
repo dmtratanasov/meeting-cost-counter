@@ -73,7 +73,7 @@ const Home: React.FC = () => {
           <h1 className={styles.title}>Meeting Cost Counter</h1>
           <div>
             <label className={styles.label}>
-              Average Salary (annual):
+              Average Salary (monthly):
               <input
                 className={styles.input}
                 type="number"
