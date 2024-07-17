@@ -122,3 +122,23 @@
 .buttonStart:hover {
   background-color: #0056b3;
 }
+
+.buttonCalculate {
+  background-color: #17a2b8;
+  color: white;
+}
+
+.buttonCalculate:hover {
+  background-color: #138496;
+}
+
+.costPerMinute {
+  margin-top: 10px;
+  font-size: 1.2em;
+  color: #333;
+}
+
+.buttonsContainer{
+  display: flex;
+  justify-content: space-around;
+}

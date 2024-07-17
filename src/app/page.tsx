@@ -21,6 +21,7 @@ const Home: React.FC = () => {
   ]);
   const [showCounter, setShowCounter] = useState<boolean>(false);
   const [removingAttendeeIndex, setRemovingAttendeeIndex] = useState<number | null>(null);
+  const [costPerMinute, setCostPerMinute] = useState<number | null>(null);
   const attendeesEndRef = useRef<HTMLDivElement>(null);
 
   const addAttendee = () => {
@@ -56,7 +57,14 @@ const Home: React.FC = () => {
     setShowCounter(false);
     setAttendees([{ name: "", role: "", department: "" }]);
     setAverageSalary(0);
+    setCostPerMinute(null);
     toast.info("Meeting stopped");
+  };
+
+  const calculateCostPerMinute = () => {
+    const hourlyRate = averageSalary / 160;
+    const costPerMinute = (hourlyRate / 60) * attendees.length;
+    setCostPerMinute(costPerMinute);
   };
 
   useEffect(() => {
@@ -141,9 +149,19 @@ const Home: React.FC = () => {
             ))}
             <div ref={attendeesEndRef} />
           </div>
-          <button className={`${styles.button} ${styles.buttonStart}`} onClick={handleStart}>
-            Start Meeting
-          </button>
+          <div className={styles.buttonsContainer}>
+            <button className={`${styles.button} ${styles.buttonStart}`} onClick={handleStart}>
+              Start Meeting
+            </button>
+            <button className={`${styles.button} ${styles.buttonCalculate}`} onClick={calculateCostPerMinute}>
+              Calculate Cost Per Minute
+            </button>
+          </div>
+          {costPerMinute !== null && (
+            <p className={styles.costPerMinute}>
+              Cost per minute: €{costPerMinute.toFixed(2)}
+            </p>
+          )}
         </div>
       )}
       {showCounter && (

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useSpring, animated } from '@react-spring/web';
 import styles from './Counter.module.css';
 import ReportModal from './ReportModal';
 
@@ -16,11 +17,25 @@ interface CounterProps {
 
 const Counter: React.FC<CounterProps> = ({ averageSalary, attendees, onStop }) => {
   const [seconds, setSeconds] = useState<number>(0);
-  const [cost, setCost] = useState<number>(0);
   const [isPaused, setIsPaused] = useState<boolean>(false);
   const [isReportModalOpen, setIsReportModalOpen] = useState<boolean>(false);
 
+  const costPerSecond = (averageSalary / 160 / 3600) * attendees.length;
+  const cost = seconds * costPerSecond;
 
+  const animatedSeconds = useSpring({
+    from: { number: 0 },
+    number: seconds,
+    delay: 0,
+    config: { mass: 1, tension: 120, friction: 30 }
+  });
+
+  const animatedCost = useSpring({
+    from: { number: 0 },
+    number: cost,
+    delay: 0,
+    config: { mass: 1, tension: 10, friction: 10 }
+  });
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -32,13 +47,6 @@ const Counter: React.FC<CounterProps> = ({ averageSalary, attendees, onStop }) =
 
     return () => clearInterval(interval);
   }, [isPaused]);
-
-  useEffect(() => {
-    const hourlyRate = averageSalary / 160;
-    const perSecondRate = hourlyRate / 3600;
-    const costPerSecond = perSecondRate * attendees.length;
-    setCost(seconds * costPerSecond);
-  }, [seconds, averageSalary, attendees.length]);
 
   const formatTime = (seconds: number) => {
     const hrs = Math.floor(seconds / 3600);
@@ -54,8 +62,12 @@ const Counter: React.FC<CounterProps> = ({ averageSalary, attendees, onStop }) =
   return (
     <div className={styles.counterContainer}>
       <h1 className={styles.counterTitle}>Meeting Cost Counter</h1>
-      <p className={styles.counterText}>Time Elapsed: {formatTime(seconds)}</p>
-      <p className={styles.counterText}>Meeting Cost: €{cost.toFixed(2)}</p>
+      <p className={styles.counterText}>
+        Time Elapsed: <animated.span>{animatedSeconds.number.to((n) => formatTime(Math.floor(n)))}</animated.span>
+      </p>
+      <p className={styles.counterText}>
+        Meeting Cost: €<animated.span>{animatedCost.number.to((n) => n.toFixed(2))}</animated.span>
+      </p>
       <div>
         <button className={`${styles.button} ${styles.buttonPause}`} onClick={() => setIsPaused(!isPaused)}>
           {isPaused ? 'Resume' : 'Pause'}
