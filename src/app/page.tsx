@@ -71,7 +71,8 @@ const Home: React.FC = () => {
               <input
                 className={styles.input}
                 type="number"
-                value={averageSalary}
+                placeholder="Average Salary"
+                value={averageSalary || ""}
                 onChange={(e) => setAverageSalary(parseFloat(e.target.value))}
               />
             </label>
