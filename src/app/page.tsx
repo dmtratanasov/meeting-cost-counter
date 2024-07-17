@@ -1,8 +1,8 @@
 "use client";
-import { useState } from "react";
-import { toast } from "react-toastify";
+import { useState, useEffect, useRef } from "react";
 import Counter from "../components/Counter";
 import Toaster from "../components/Toaster";
+import { toast } from "react-toastify";
 import styles from "./page.module.css";
 
 interface Attendee {
@@ -21,7 +21,7 @@ const Home: React.FC = () => {
   ]);
   const [showCounter, setShowCounter] = useState<boolean>(false);
   const [removingAttendeeIndex, setRemovingAttendeeIndex] = useState<number | null>(null);
-
+  const attendeesEndRef = useRef<HTMLDivElement>(null);
 
   const addAttendee = () => {
     setAttendees([...attendees, { name: "", role: "", department: "" }]);
@@ -59,6 +59,12 @@ const Home: React.FC = () => {
     toast.info("Meeting stopped");
   };
 
+  useEffect(() => {
+    if (attendeesEndRef.current) {
+      attendeesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [attendees]);
+
   return (
     <div className={styles.container}>
       <Toaster />
@@ -87,7 +93,7 @@ const Home: React.FC = () => {
               <div
                 key={index}
                 className={`${styles.attendeeContainer} ${
-                  removingAttendeeIndex === index ? styles.slideOut : styles.slideIn
+                  removingAttendeeIndex === index ? styles.fadeOut : styles.fadeIn
                 }`}
               >
                 <div className={styles.inputsContainer}>
@@ -107,7 +113,7 @@ const Home: React.FC = () => {
                       updateAttendee(index, { ...attendee, role: e.target.value })
                     }
                   >
-                    <option value="">Role</option>
+                    <option value="">Select Role</option>
                     {roles.map(role => (
                       <option key={role} value={role}>{role}</option>
                     ))}
@@ -119,7 +125,7 @@ const Home: React.FC = () => {
                       updateAttendee(index, { ...attendee, department: e.target.value })
                     }
                   >
-                    <option value="">Department</option>
+                    <option value="">Select Department</option>
                     {departments.map(department => (
                       <option key={department} value={department}>{department}</option>
                     ))}
@@ -133,6 +139,7 @@ const Home: React.FC = () => {
                 </div>
               </div>
             ))}
+            <div ref={attendeesEndRef} />
           </div>
           <button className={`${styles.button} ${styles.buttonStart}`} onClick={handleStart}>
             Start Meeting
