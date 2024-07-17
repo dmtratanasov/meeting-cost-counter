@@ -1,7 +1,6 @@
 
 # Meeting Cost Counter
 
-![Annoying Colleague](https://drive.google.com/file/d/144fD0YeX6XOTSS3EWCaboF3tiolzUlM2/view?usp=sharing)
 
 ## Introduction
 
